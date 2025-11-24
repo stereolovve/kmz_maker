@@ -92,18 +92,23 @@ lista_obras/
 │   ├── services.py        # Lógica de processamento KML
 │   ├── admin.py           # Django Admin customizado
 │   ├── templates/
-│   │   └── home.html      # Interface web
+│   │   ├── home.html      # Interface web principal
+│   │   └── tutorial.html  # Página tutorial para usuários
 │   └── migrations/
+├── deploy/                # Arquivos de deploy
+│   ├── kmz.conf           # Config Supervisor
+│   ├── kmz.perplan.tech.conf  # Config Nginx
+│   ├── deploy.sh          # Script deploy automatizado
+│   └── README.md          # Documentação deploy
 ├── media/                 # Arquivos gerados
 │   ├── uploads/           # Excel enviados
 │   ├── outputs/           # KML gerados
 │   └── logs/              # Logs de processamento
 ├── staticfiles/           # Arquivos estáticos coletados
-├── README.md              # Instruções de uso (Excel)
-├── DEPLOY.md              # Guia de deploy AWS EC2
-├── PROJECT_README.md      # Este arquivo
+├── PROJECT_README.md      # Documentação do sistema (este arquivo)
+├── DEPLOY_SUBDOMAIN.md    # Guia completo de deploy EC2
 ├── requirements.txt       # Dependências Python
-├── .env.example           # Template de variáveis
+├── .env                   # Variáveis de ambiente (não versionado)
 ├── .gitignore
 └── manage.py
 ```
@@ -344,12 +349,46 @@ GOOGLE_MAPS_API_KEY=sua-api-key-aqui
 
 ## Deploy em Produção
 
-Consulte `DEPLOY.md` para instruções completas de deploy na AWS EC2 com:
-- PostgreSQL
-- Gunicorn
-- Nginx
-- Supervisor
-- HTTPS (Let's Encrypt)
+### Arquivos de Deploy Prontos
+
+Este repositório inclui templates prontos na pasta `deploy/`:
+- **kmz.conf**: Configuração Supervisor (gerenciamento de processo)
+- **kmz.perplan.tech.conf**: Configuração Nginx (proxy reverso)
+- **deploy.sh**: Script de deploy automatizado
+- **deploy/README.md**: Documentação completa dos arquivos
+
+### Guia Completo de Deploy
+
+Consulte `DEPLOY_SUBDOMAIN.md` para instruções passo-a-passo de deploy na AWS EC2 com:
+- Criação de repositório GitHub
+- Setup na EC2 (virtualenv, dependências, migrations)
+- Configuração Supervisor (porta 8001)
+- Configuração Nginx (proxy reverso)
+- DNS na Hostinger (kmz.perplan.tech)
+- SSL com Let's Encrypt (HTTPS)
+- Script de deploy automatizado para atualizações futuras
+
+### Deploy Rápido (Atualizações)
+
+Após o setup inicial, atualizações são simples:
+
+```bash
+# SSH na EC2
+ssh -i sua-chave.pem ubuntu@IP_DA_EC2
+
+# Navegar e executar script
+cd /var/www/kmz
+./deploy/deploy.sh
+```
+
+O script automaticamente:
+- Faz backup do banco
+- Puxa alterações do GitHub
+- Instala dependências
+- Executa migrações
+- Coleta arquivos estáticos
+- Reinicia aplicação
+- Verifica saúde do sistema
 
 ---
 

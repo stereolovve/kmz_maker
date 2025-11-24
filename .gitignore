@@ -22,11 +22,21 @@ wheels/
 
 # Django
 *.log
+*.pot
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media/
+db.sqlite3.backup*
 staticfiles/
+static_root/
+
+# Media files (preservar estrutura de pastas)
+media/uploads/*
+media/outputs/*
+media/logs/*
+!media/uploads/.gitkeep
+!media/outputs/.gitkeep
+!media/logs/.gitkeep
 
 # Environment
 .env
