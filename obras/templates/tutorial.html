@@ -200,8 +200,8 @@
             <h2>1. Visão Geral</h2>
             <p>O Gerador de KML converte planilhas Excel de obras rodoviárias em arquivos KML para visualização no Google Earth. O sistema oferece dois modos de processamento:</p>
             <ul>
-                <li><strong>Simples</strong>: Cria apenas marcadores pontuais no mapa</li>
-                <li><strong>Com Rotas</strong>: Cria marcadores e rotas entre pontos usando Google Maps</li>
+                <li><strong>Simples</strong>: Cria apenas alfinetes no mapa</li>
+                <li><strong>Com Rotas</strong>: Cria alfinetes e rotas entre pontos usando a API do Google Maps</li>
             </ul>
         </div>
 
@@ -318,9 +318,10 @@ Longitude: 46°37'59.91"W ou  46 37 59.91 W
             <ol>
                 <li><strong>Prepare sua planilha Excel</strong>
                     <ul>
+                        <li>Formate a planilha base com os dados corretos</li>
                         <li>Certifique-se de que todas as colunas obrigatórias estão presentes</li>
                         <li>Verifique se as coordenadas estão em um formato válido</li>
-                        <li>Salve como .xlsx ou .xls</li>
+                        <li>Salve como .xlsx</li>
                     </ul>
                 </li>
 
@@ -333,7 +334,7 @@ Longitude: 46°37'59.91"W ou  46 37 59.91 W
 
                 <li><strong>Escolha o tipo de processamento</strong>
                     <ul>
-                        <li><strong>Simples</strong>: Se você quer apenas marcadores</li>
+                        <li><strong>Simples</strong>: Se você quer apenas alfinetes</li>
                         <li><strong>Com Rotas</strong>: Se você tem coordenadas inicial e final e quer rotas</li>
                     </ul>
                 </li>
@@ -352,13 +353,6 @@ Longitude: 46°37'59.91"W ou  46 37 59.91 W
                     </ul>
                 </li>
 
-                <li><strong>Visualize no Google Earth</strong>
-                    <ul>
-                        <li>Abra o Google Earth Pro ou Google Earth Web</li>
-                        <li>Arquivo > Abrir > Selecione o KML baixado</li>
-                        <li>Explore os marcadores organizados por ano e tipo</li>
-                    </ul>
-                </li>
             </ol>
         </div>
 
@@ -415,30 +409,10 @@ Longitude: 46°37'59.91"W ou  46 37 59.91 W
             </ul>
         </div>
 
-        <div class="section">
-            <h2>7. Tipos de Obras Suportados</h2>
-            <p>O sistema reconhece automaticamente os seguintes tipos (com cores predefinidas):</p>
-            <ul>
-                <li>Duplicação / Duplicações</li>
-                <li>Faixa Adicional</li>
-                <li>Obras de Contorno</li>
-                <li>Travessias Urbanas</li>
-                <li>Vias Marginais</li>
-                <li>Correções de traçado</li>
-                <li>Interseções</li>
-                <li>Retornos</li>
-                <li>Passarelas</li>
-                <li>OAEs</li>
-                <li>Áreas de Escape</li>
-                <li>Ciclovias</li>
-            </ul>
-            <div class="info">
-                <strong>Nota:</strong> Outros tipos também são aceitos e receberão cores geradas automaticamente.
-            </div>
-        </div>
+
 
         <div class="section">
-            <h2>8. Dicas e Melhores Práticas</h2>
+            <h2>7. Dicas e Melhores Práticas</h2>
             <ul>
                 <li>Use sempre o formato decimal para coordenadas quando possível</li>
                 <li>Mantenha uma planilha modelo com as colunas corretas</li>
@@ -451,12 +425,11 @@ Longitude: 46°37'59.91"W ou  46 37 59.91 W
         </div>
 
         <div class="section">
-            <h2>9. Suporte e Contato</h2>
+            <h2>8. Suporte e Contato</h2>
             <p>Para dúvidas ou problemas:</p>
             <ul>
                 <li>Consulte o arquivo de log para detalhes do erro</li>
-                <li>Acesse a documentação da API em <a href="/swagger/" style="color: #60a5fa;">/swagger/</a></li>
-                <li>Entre em contato com o suporte técnico da empresa</li>
+                <li>Entre em contato com o Lucas Diego para reportar o erro!</li>
             </ul>
         </div>
 
