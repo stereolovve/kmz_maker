@@ -1,0 +1,435 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Lista de Obras{% endblock %}</title>
+    <style>
+        /* === GLOBAL RESET === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #1e3a5f 100%);
+            min-height: 100vh;
+            color: #e0e7ff;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 260px;
+            background: rgba(15, 23, 42, 0.95);
+            border-right: 1px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        /* Sidebar Header */
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            text-align: center;
+        }
+
+        .sidebar-title {
+            color: #60a5fa;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-subtitle {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            margin-bottom: 8px;
+        }
+
+        .nav-section + .nav-section {
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .nav-section-title {
+            padding: 8px 20px;
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-left-color: #3b82f6;
+        }
+
+        .nav-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .nav-text {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-badge {
+            padding: 2px 8px;
+            background: rgba(234, 179, 8, 0.2);
+            color: #fbbf24;
+            font-size: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* External link indicator */
+        .nav-item[target="_blank"]::after {
+            content: '↗';
+            font-size: 12px;
+            opacity: 0.5;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .version-info {
+            text-align: center;
+        }
+
+        .version-label {
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .version-number {
+            color: #60a5fa;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .version-date {
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(96, 165, 250, 0.3);
+            border-top-color: #60a5fa;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* === MAIN CONTENT AREA === */
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* === MOBILE MENU === */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* === RESPONSIVE BREAKPOINTS === */
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+            .main-content {
+                margin-left: 220px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+                box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding-top: 80px;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
+
+        /* === PAGE-SPECIFIC STYLES === */
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle Button -->
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle menu">
+        <span class="hamburger-icon">☰</span>
+    </button>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header">
+            <div class="sidebar-title">KMZ Solutions</div>
+            <div class="sidebar-subtitle">Sistema de Ferramentas</div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="sidebar-nav">
+            <!-- Main Tools Section -->
+            <div class="nav-section">
+                <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+                    <span class="nav-icon">KML</span>
+                    <span class="nav-text">Gerador de KML</span>
+                </a>
+                <a href="/tutorial/" class="nav-item {% if request.path == '/tutorial/' %}active{% endif %}">
+                    <span class="nav-icon">?</span>
+                    <span class="nav-text">Tutorial</span>
+                </a>
+            </div>
+
+            <!-- Future Tools Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Ferramentas Futuras</div>
+                <a href="#" class="nav-item disabled" title="Em desenvolvimento">
+                    <span class="nav-icon">XLS</span>
+                    <span class="nav-text">KMZ → Excel</span>
+                    <span class="nav-badge">Em breve</span>
+                </a>
+                <a href="#" class="nav-item disabled" title="Em desenvolvimento">
+                    <span class="nav-icon">#</span>
+                    <span class="nav-text">Renomear Pins</span>
+                    <span class="nav-badge">Em breve</span>
+                </a>
+            </div>
+
+            <!-- System Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Sistema</div>
+                <a href="/swagger/" target="_blank" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    <span class="nav-text">API Docs</span>
+                </a>
+                <a href="/admin/" target="_blank" class="nav-item">
+                    <span class="nav-icon">A</span>
+                    <span class="nav-text">Admin</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Version Display -->
+        <div class="sidebar-footer">
+            <div class="version-info">
+                <div class="version-label">Versão</div>
+                <div class="version-number" id="appVersion">
+                    <span class="loading-spinner"></span>
+                </div>
+                <div class="version-date" id="appVersionDate"></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="main-content">
+        {% block content %}
+        <!-- Page-specific content goes here -->
+        {% endblock %}
+    </main>
+
+    <!-- Base JavaScript -->
+    <script>
+        // ============================================
+        // VERSION FETCHING
+        // ============================================
+        async function loadVersion() {
+            const versionEl = document.getElementById('appVersion');
+            const dateEl = document.getElementById('appVersionDate');
+
+            try {
+                const response = await fetch('/api/version/');
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch version');
+                }
+
+                const data = await response.json();
+
+                versionEl.textContent = `v${data.version}`;
+                if (data.last_updated) {
+                    dateEl.textContent = `Atualizado em ${data.last_updated}`;
+                }
+            } catch (error) {
+                console.error('Error loading version:', error);
+                // Fallback version
+                versionEl.textContent = 'v1.0.0';
+                dateEl.textContent = '';
+            }
+        }
+
+        // ============================================
+        // MOBILE MENU FUNCTIONALITY
+        // ============================================
+        function initMobileMenu() {
+            const toggle = document.getElementById('mobile-menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            if (!toggle || !sidebar || !overlay) return;
+
+            function toggleMenu() {
+                sidebar.classList.toggle('mobile-open');
+                overlay.classList.toggle('active');
+            }
+
+            function closeMenu() {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+            }
+
+            // Toggle button click
+            toggle.addEventListener('click', toggleMenu);
+
+            // Overlay click
+            overlay.addEventListener('click', closeMenu);
+
+            // Close menu when clicking nav link (mobile only)
+            document.querySelectorAll('.nav-item:not(.disabled)').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        closeMenu();
+                    }
+                });
+            });
+
+            // Close menu on window resize to desktop
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    closeMenu();
+                }
+            });
+        }
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadVersion();
+            initMobileMenu();
+        });
+    </script>
+
+    <!-- Page-specific JavaScript -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

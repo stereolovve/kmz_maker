@@ -4,22 +4,96 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an empty project directory named "lista_obras" (Portuguese for "list of works"). The repository currently contains only configuration files:
+Django-based web application for converting road work spreadsheets (Excel) to KML files for visualization in Google Earth. The application provides a clean, professional interface with sidebar navigation for multiple tools.
 
-- `.claude/settings.local.json` - Claude Code permissions configuration
-- `.vscode/settings.json` - VS Code workspace customization with green theme colors
+**Technology Stack:**
+- Backend: Django 5.0.1 + Django REST Framework
+- Frontend: Vanilla JavaScript (no frameworks)
+- Database: SQLite (dev) / PostgreSQL (prod)
+- Deployment: uWSGI + Nginx
+
+## Code Style Guidelines
+
+### Emoji Policy
+
+**IMPORTANT: Emojis are STRICTLY PROHIBITED throughout this entire project.**
+
+**DO NOT use emojis in:**
+- HTML templates (all .html files)
+- Python code (all .py files)
+- JavaScript code
+- CSS files
+- Documentation (README, comments, docstrings)
+- Git commit messages
+- User-facing text
+- API responses
+- Error messages
+- Log files
+
+**Use these alternatives instead:**
+- Icons: Use icon fonts (FontAwesome, Material Icons) or SVG icons
+- Visual indicators: Use Unicode symbols (→, ×, ✓, ⚠, ⚙, ▣, ▢, #) or text labels
+- Status messages: Use clear text ("Success", "Error", "Warning", "Processing")
+- Buttons: Use text labels with optional Unicode symbols
+- Navigation: Use text + Unicode symbols or icon fonts
+
+**Rationale:**
+- Emojis can cause rendering issues across different systems
+- Not professional for enterprise applications
+- Inconsistent display across browsers and devices
+- Accessibility concerns
+- User explicitly dislikes emojis
 
 ## Architecture
 
-The project structure is minimal and appears to be in initial setup phase. No source code, build configuration, or documentation files are present yet.
+**Django Apps:**
+- `obras/` - Main application for KML generation
+
+**Key Files:**
+- `obras/templates/base.html` - Base template with sidebar navigation
+- `obras/templates/home.html` - KML Generator interface (linear vertical layout)
+- `obras/templates/tutorial.html` - User documentation
+- `obras/views.py` - View functions and API endpoints
+- `obras/services.py` - Business logic for KML processing
 
 ## Development Commands
 
-No build, test, or lint commands are currently configured. This will need to be set up once the project technology stack is determined.
+```bash
+# Start development server
+python manage.py runserver
+
+# Run migrations
+python manage.py migrate
+
+# Create superuser
+python manage.py createsuperuser
+
+# Collect static files
+python manage.py collectstatic
+```
+
+## UI/UX Guidelines
+
+### Layout Principles
+- **Linear Vertical Flow**: All pages use top-to-bottom linear layout
+- **No Multi-Column Grids**: Avoid complex grid layouts; keep it simple and vertical
+- **Clear Hierarchy**: Title → Input → Options → Action Button → Results
+- **Responsive**: Mobile-first, vertical layout works on all screen sizes
+
+### Component Order (Home Page)
+1. Page Header (title + description)
+2. Upload Area
+3. Selected File Display
+4. Process Type Selection
+5. Error Alert (if any)
+6. **Process Button** (always below selections)
+7. Status Card (when processing)
+8. Download Card (when complete)
 
 ## Notes
 
-- The directory name suggests this may be a Portuguese project related to managing or listing works/projects
-- VS Code is configured with a green color theme
-- Claude Code has basic file system permissions configured
-- The project is not yet initialized as a git repository
+- Sidebar titled "KMZ Solutions" with version display in footer
+- Version fetched dynamically from `/api/version/` endpoint
+- Mobile responsive with hamburger menu (<768px)
+- All functionality must work without JavaScript frameworks
+- Keep styling embedded in templates for simplicity

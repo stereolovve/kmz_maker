@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from django.http import FileResponse
 from django.shortcuts import render
@@ -23,6 +23,50 @@ def home_view(request):
 def tutorial_view(request):
     """View para a página de tutorial"""
     return render(request, 'tutorial.html')
+
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="Get current application version information",
+    responses={
+        200: openapi.Response(
+            description="Version information",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'version': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example='1.0.0',
+                        description='Semantic version number'
+                    ),
+                    'app_name': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example='Lista de Obras',
+                        description='Application name'
+                    ),
+                    'last_updated': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example='2025-01-25',
+                        description='Date of last update (YYYY-MM-DD)'
+                    ),
+                }
+            )
+        )
+    }
+)
+@api_view(['GET'])
+def version_view(request):
+    """
+    API endpoint to return current application version
+
+    This endpoint provides version information displayed in the sidebar.
+    No authentication required - public endpoint.
+    """
+    return Response({
+        'version': '1.0.0',
+        'app_name': 'Lista de Obras',
+        'last_updated': '2025-01-25'
+    })
 
 
 class KMLJobViewSet(viewsets.ReadOnlyModelViewSet):

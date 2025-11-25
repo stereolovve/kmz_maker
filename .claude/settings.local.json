@@ -4,7 +4,16 @@
       "Bash(dir)",
       "Bash(ls:*)",
       "Bash(find:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(dir \"C:\\Users\\lucas.melo\\lista_obras\" /S /B)",
+      "Bash(cat:*)",
+      "Bash(timeout /t 3)",
+      "Bash(curl:*)",
+      "Bash(copy home.html home.html.bak)",
+      "Bash(findstr:*)",
+      "Bash(dir:*)",
+      "Bash(del:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nClean up project structure\n\nRemove unnecessary files and folders:\n- Delete concat.py (old standalone script)\n- Delete obras/services_with_logs.py (incomplete file)\n- Delete duplicate media folders (medialogs/, mediaoutputs/, mediauploads/)\n- Delete old input/ and output/ folders\n- Delete backup template files (.bak files)\n- Delete nul error file\n\nKeep kmz_maker.py and lista_simples.py as standalone scripts.\n\nGenerated with Claude Code (https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": []
   }

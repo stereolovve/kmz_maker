@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from obras.views import home_view, tutorial_view
+from obras.views import home_view, tutorial_view, version_view
 
 # Swagger/OpenAPI Schema
 schema_view = get_schema_view(
@@ -58,6 +58,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     # API
+    path('api/version/', version_view, name='api-version'),
     path('api/kml/', include('obras.urls')),
 
     # Swagger/OpenAPI Documentation

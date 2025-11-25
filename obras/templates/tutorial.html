@@ -1,439 +1,410 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Como Usar - Gerador de KML</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends 'base.html' %}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a1929 0%, #1e3a5f 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #e0e7ff;
-        }
+{% block title %}Como Usar - Gerador de KML{% endblock %}
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: rgba(15, 23, 42, 0.9);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            padding: 40px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
+{% block extra_css %}
+<style>
+    /* Tutorial-specific styles */
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        padding: 40px;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
-        }
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+    }
 
-        .header h1 {
-            color: #60a5fa;
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
+    .header h1 {
+        color: #60a5fa;
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
 
-        .header p {
-            color: #94a3b8;
-            font-size: 16px;
-        }
+    .header p {
+        color: #94a3b8;
+        font-size: 16px;
+    }
 
-        .back-link {
-            display: inline-block;
-            color: #60a5fa;
-            text-decoration: none;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
+    .section {
+        margin-bottom: 40px;
+    }
 
-        .back-link:hover {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: #60a5fa;
-        }
+    .section h2 {
+        color: #60a5fa;
+        font-size: 24px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    }
 
-        .section {
-            margin-bottom: 40px;
-        }
+    .section h3 {
+        color: #93c5fd;
+        font-size: 18px;
+        margin: 20px 0 10px 0;
+    }
 
-        .section h2 {
-            color: #60a5fa;
-            font-size: 24px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-        }
+    .section p {
+        color: #cbd5e1;
+        line-height: 1.8;
+        margin-bottom: 15px;
+    }
 
-        .section h3 {
-            color: #93c5fd;
-            font-size: 18px;
-            margin: 20px 0 10px 0;
-        }
+    .section ul, .section ol {
+        color: #cbd5e1;
+        line-height: 1.8;
+        margin-left: 20px;
+        margin-bottom: 15px;
+    }
 
-        .section p {
-            color: #cbd5e1;
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
+    .section li {
+        margin-bottom: 8px;
+    }
 
-        .section ul, .section ol {
-            color: #cbd5e1;
-            line-height: 1.8;
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
+    code {
+        background: rgba(59, 130, 246, 0.2);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+    }
 
-        .section li {
-            margin-bottom: 8px;
-        }
+    .code-block {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        color: #e0e7ff;
+        overflow-x: auto;
+    }
 
-        .code-block {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #e0e7ff;
-            overflow-x: auto;
-        }
+    .table-wrapper {
+        overflow-x: auto;
+        margin: 20px 0;
+    }
 
-        .table-wrapper {
-            overflow-x: auto;
-            margin: 20px 0;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 8px;
+        overflow: hidden;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(30, 41, 59, 0.6);
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    }
 
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-        }
+    th {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        font-weight: 600;
+    }
 
-        th {
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            font-weight: 600;
-        }
+    td {
+        color: #cbd5e1;
+    }
 
-        td {
-            color: #cbd5e1;
-        }
+    .alert {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        color: #fca5a5;
+    }
 
-        .alert {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            color: #fca5a5;
-        }
+    .info {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        color: #93c5fd;
+    }
 
-        .info {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            color: #93c5fd;
-        }
+    .success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        color: #6ee7b7;
+    }
 
-        .success {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            color: #6ee7b7;
-        }
+    .badge {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 5px;
+    }
 
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-right: 5px;
-        }
+    .badge-required {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+    }
 
-        .badge-required {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-        }
+    .badge-optional {
+        background: rgba(234, 179, 8, 0.2);
+        color: #fbbf24;
+    }
+</style>
+{% endblock %}
 
-        .badge-optional {
-            background: rgba(234, 179, 8, 0.2);
-            color: #fbbf24;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="/" class="back-link">Voltar ao Início</a>
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>Como Usar o Gerador de KML</h1>
+        <p>Guia completo para criar arquivos KML a partir de planilhas Excel</p>
+    </div>
 
-        <div class="header">
-            <h1>Como Usar o Gerador de KML</h1>
-            <p>Guia completo para criar arquivos KML a partir de planilhas Excel</p>
+    <div class="section">
+        <h2>1. Visão Geral</h2>
+        <p>O Gerador de KML converte planilhas Excel de obras rodoviárias em arquivos KML para visualização no Google Earth. O sistema oferece dois modos de processamento:</p>
+        <ul>
+            <li><strong>Simples</strong>: Cria apenas alfinetes no mapa</li>
+            <li><strong>Com Rotas</strong>: Cria alfinetes e rotas entre pontos usando a API do Google Maps</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Preparando a Planilha Excel</h2>
+
+        <h3>Colunas da Planilha</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Coluna</th>
+                        <th>Status</th>
+                        <th>Descrição</th>
+                        <th>Exemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>tipo</code></td>
+                        <td><span class="badge badge-required">Obrigatório</span></td>
+                        <td>Tipo da obra</td>
+                        <td>Duplicação, Interseções</td>
+                    </tr>
+                    <tr>
+                        <td><code>ano</code></td>
+                        <td><span class="badge badge-required">Obrigatório</span></td>
+                        <td>Ano da obra</td>
+                        <td>2024, 2025</td>
+                    </tr>
+                    <tr>
+                        <td><code>kmi</code></td>
+                        <td><span class="badge badge-required">Obrigatório</span></td>
+                        <td>Quilômetro inicial</td>
+                        <td>120.5, 45</td>
+                    </tr>
+                    <tr>
+                        <td><code>lati</code></td>
+                        <td><span class="badge badge-required">Obrigatório</span></td>
+                        <td>Latitude inicial</td>
+                        <td>-23.550520</td>
+                    </tr>
+                    <tr>
+                        <td><code>longi</code></td>
+                        <td><span class="badge badge-required">Obrigatório</span></td>
+                        <td>Longitude inicial</td>
+                        <td>-46.633308</td>
+                    </tr>
+                    <tr>
+                        <td><code>kmf</code></td>
+                        <td><span class="badge badge-optional">Opcional</span></td>
+                        <td>Quilômetro final</td>
+                        <td>125.8</td>
+                    </tr>
+                    <tr>
+                        <td><code>latf</code></td>
+                        <td><span class="badge badge-optional">Opcional</span></td>
+                        <td>Latitude final</td>
+                        <td>-23.560000</td>
+                    </tr>
+                    <tr>
+                        <td><code>longf</code></td>
+                        <td><span class="badge badge-optional">Opcional</span></td>
+                        <td>Longitude final</td>
+                        <td>-46.640000</td>
+                    </tr>
+                    <tr>
+                        <td><code>sentido</code></td>
+                        <td><span class="badge badge-optional">Opcional</span></td>
+                        <td>Sentido da obra</td>
+                        <td>Norte, Sul</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <div class="section">
-            <h2>1. Visão Geral</h2>
-            <p>O Gerador de KML converte planilhas Excel de obras rodoviárias em arquivos KML para visualização no Google Earth. O sistema oferece dois modos de processamento:</p>
-            <ul>
-                <li><strong>Simples</strong>: Cria apenas alfinetes no mapa</li>
-                <li><strong>Com Rotas</strong>: Cria alfinetes e rotas entre pontos usando a API do Google Maps</li>
-            </ul>
+        <div class="alert">
+            <strong>Importante:</strong> Para criar rotas, as colunas <code>kmf</code>, <code>latf</code> e <code>longf</code> são necessárias.
         </div>
+    </div>
 
-        <div class="section">
-            <h2>2. Preparando a Planilha Excel</h2>
+    <div class="section">
+        <h2>3. Formatos de Coordenadas</h2>
+        <p>O sistema aceita três formatos de coordenadas:</p>
 
-            <h3>Colunas da Planilha</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Coluna</th>
-                            <th>Status</th>
-                            <th>Descrição</th>
-                            <th>Exemplo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>tipo</code></td>
-                            <td><span class="badge badge-required">Obrigatório</span></td>
-                            <td>Tipo da obra</td>
-                            <td>Duplicação, Interseções</td>
-                        </tr>
-                        <tr>
-                            <td><code>ano</code></td>
-                            <td><span class="badge badge-required">Obrigatório</span></td>
-                            <td>Ano da obra</td>
-                            <td>2024, 2025</td>
-                        </tr>
-                        <tr>
-                            <td><code>kmi</code></td>
-                            <td><span class="badge badge-required">Obrigatório</span></td>
-                            <td>Quilômetro inicial</td>
-                            <td>120.5, 45</td>
-                        </tr>
-                        <tr>
-                            <td><code>lati</code></td>
-                            <td><span class="badge badge-required">Obrigatório</span></td>
-                            <td>Latitude inicial</td>
-                            <td>-23.550520</td>
-                        </tr>
-                        <tr>
-                            <td><code>longi</code></td>
-                            <td><span class="badge badge-required">Obrigatório</span></td>
-                            <td>Longitude inicial</td>
-                            <td>-46.633308</td>
-                        </tr>
-                        <tr>
-                            <td><code>kmf</code></td>
-                            <td><span class="badge badge-optional">Opcional</span></td>
-                            <td>Quilômetro final</td>
-                            <td>125.8</td>
-                        </tr>
-                        <tr>
-                            <td><code>latf</code></td>
-                            <td><span class="badge badge-optional">Opcional</span></td>
-                            <td>Latitude final</td>
-                            <td>-23.560000</td>
-                        </tr>
-                        <tr>
-                            <td><code>longf</code></td>
-                            <td><span class="badge badge-optional">Opcional</span></td>
-                            <td>Longitude final</td>
-                            <td>-46.640000</td>
-                        </tr>
-                        <tr>
-                            <td><code>sentido</code></td>
-                            <td><span class="badge badge-optional">Opcional</span></td>
-                            <td>Sentido da obra</td>
-                            <td>Norte, Sul</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="alert">
-                <strong>Importante:</strong> Para criar rotas, as colunas <code>kmf</code>, <code>latf</code> e <code>longf</code> são necessárias.
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>3. Formatos de Coordenadas</h2>
-            <p>O sistema aceita três formatos de coordenadas:</p>
-
-            <h3>Formato Decimal (Recomendado)</h3>
-            <div class="code-block">
+        <h3>Formato Decimal (Recomendado)</h3>
+        <div class="code-block">
 Latitude:  -23.550520
 Longitude: -46.633308
-            </div>
-            <p>Use ponto (.) ou vírgula (,) como separador decimal. Latitudes sul e longitudes oeste devem ser negativas.</p>
+        </div>
+        <p>Use ponto (.) ou vírgula (,) como separador decimal. Latitudes sul e longitudes oeste devem ser negativas.</p>
 
-            <h3>Formato DMS (Graus, Minutos, Segundos)</h3>
-            <div class="code-block">
+        <h3>Formato DMS (Graus, Minutos, Segundos)</h3>
+        <div class="code-block">
 Latitude:  23°33'1.87"S  ou  23 33 1.87 S
 Longitude: 46°37'59.91"W ou  46 37 59.91 W
-            </div>
+        </div>
 
-            <h3>Formato DMS sem Direção</h3>
-            <div class="code-block">
+        <h3>Formato DMS sem Direção</h3>
+        <div class="code-block">
 23 33 1.87
 46 37 59.91
-            </div>
-            <p>Se não houver direção (S/N/W/E), o sistema assume coordenadas brasileiras (negativas).</p>
-
-            <div class="info">
-                <strong>Validação Automática:</strong> O sistema verifica se as coordenadas estão dentro do território brasileiro (Lat: -35 a 5, Lon: -75 a -30).
-            </div>
         </div>
+        <p>Se não houver direção (S/N/W/E), o sistema assume coordenadas brasileiras (negativas).</p>
 
-        <div class="section">
-            <h2>4. Passo a Passo para Usar</h2>
-
-            <ol>
-                <li><strong>Prepare sua planilha Excel</strong>
-                    <ul>
-                        <li>Formate a planilha base com os dados corretos</li>
-                        <li>Certifique-se de que todas as colunas obrigatórias estão presentes</li>
-                        <li>Verifique se as coordenadas estão em um formato válido</li>
-                        <li>Salve como .xlsx</li>
-                    </ul>
-                </li>
-
-                <li><strong>Acesse o sistema</strong>
-                    <ul>
-                        <li>Abra o navegador e vá para a página inicial</li>
-                        <li>Clique na área de upload ou arraste o arquivo</li>
-                    </ul>
-                </li>
-
-                <li><strong>Escolha o tipo de processamento</strong>
-                    <ul>
-                        <li><strong>Simples</strong>: Se você quer apenas alfinetes</li>
-                        <li><strong>Com Rotas</strong>: Se você tem coordenadas inicial e final e quer rotas</li>
-                    </ul>
-                </li>
-
-                <li><strong>Clique em "Processar Arquivo"</strong>
-                    <ul>
-                        <li>Aguarde o processamento concluir</li>
-                        <li>Verifique as estatísticas exibidas</li>
-                    </ul>
-                </li>
-
-                <li><strong>Faça o download</strong>
-                    <ul>
-                        <li><strong>Download KML</strong>: Arquivo para abrir no Google Earth</li>
-                        <li><strong>Download Log (.txt)</strong>: Detalhes do processamento para debug</li>
-                    </ul>
-                </li>
-
-            </ol>
+        <div class="info">
+            <strong>Validação Automática:</strong> O sistema verifica se as coordenadas estão dentro do território brasileiro (Lat: -35 a 5, Lon: -75 a -30).
         </div>
-
-        <div class="section">
-            <h2>5. Entendendo o Log de Processamento</h2>
-            <p>O arquivo de log (.txt) contém informações detalhadas sobre o processamento:</p>
-
-            <h3>Informações no Log:</h3>
-            <ul>
-                <li>Data e hora do processamento</li>
-                <li>Nome do arquivo processado</li>
-                <li>Total de registros encontrados</li>
-                <li>Colunas identificadas na planilha</li>
-                <li>Detalhes de cada item processado</li>
-                <li>Itens ignorados (com motivo)</li>
-                <li>Rotas criadas (se aplicável)</li>
-                <li>Resumo final com estatísticas</li>
-            </ul>
-
-            <div class="success">
-                <strong>Dica:</strong> Use o log para identificar problemas com coordenadas ou dados ausentes na sua planilha.
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>6. Problemas Comuns</h2>
-
-            <h3>Todos os itens foram ignorados</h3>
-            <ul>
-                <li>Verifique se as colunas estão com os nomes corretos</li>
-                <li>Certifique-se de que as coordenadas estão preenchidas</li>
-                <li>Confirme que está usando a primeira sheet da planilha</li>
-            </ul>
-
-            <h3>Coordenadas inválidas</h3>
-            <ul>
-                <li>Verifique se as coordenadas estão dentro do Brasil</li>
-                <li>Confirme o formato (decimal ou DMS)</li>
-                <li>Use ponto (.) no lugar de vírgula (,) para decimais no Excel</li>
-            </ul>
-
-            <h3>Rotas não foram criadas</h3>
-            <ul>
-                <li>Certifique-se de escolher o modo "Com Rotas"</li>
-                <li>Verifique se <code>latf</code> e <code>longf</code> estão preenchidos</li>
-                <li>Confirme que <code>kmi</code> é diferente de <code>kmf</code></li>
-            </ul>
-
-            <h3>Erro ao processar</h3>
-            <ul>
-                <li>Verifique se o arquivo é realmente Excel (.xlsx ou .xls)</li>
-                <li>Certifique-se de que a planilha não está corrompida</li>
-                <li>Consulte o log para detalhes do erro</li>
-            </ul>
-        </div>
-
-
-
-        <div class="section">
-            <h2>7. Dicas e Melhores Práticas</h2>
-            <ul>
-                <li>Use sempre o formato decimal para coordenadas quando possível</li>
-                <li>Mantenha uma planilha modelo com as colunas corretas</li>
-                <li>Valide suas coordenadas no Google Maps antes de enviar</li>
-                <li>Organize seus dados por ano e tipo para facilitar visualização</li>
-                <li>Sempre faça download do log para verificar o processamento</li>
-                <li>Teste com uma planilha pequena antes de processar dados grandes</li>
-                <li>Mantenha backup das suas planilhas originais</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>8. Suporte e Contato</h2>
-            <p>Para dúvidas ou problemas:</p>
-            <ul>
-                <li>Consulte o arquivo de log para detalhes do erro</li>
-                <li>Entre em contato com o Lucas Diego para reportar o erro!</li>
-            </ul>
-        </div>
-
-        <a href="/" class="back-link">Voltar ao Início</a>
     </div>
-</body>
-</html>
+
+    <div class="section">
+        <h2>4. Passo a Passo para Usar</h2>
+
+        <ol>
+            <li><strong>Prepare sua planilha Excel</strong>
+                <ul>
+                    <li>Formate a planilha base com os dados corretos</li>
+                    <li>Certifique-se de que todas as colunas obrigatórias estão presentes</li>
+                    <li>Verifique se as coordenadas estão em um formato válido</li>
+                    <li>Salve como .xlsx</li>
+                </ul>
+            </li>
+
+            <li><strong>Acesse o sistema</strong>
+                <ul>
+                    <li>Abra o navegador e vá para a página inicial</li>
+                    <li>Clique na área de upload ou arraste o arquivo</li>
+                </ul>
+            </li>
+
+            <li><strong>Escolha o tipo de processamento</strong>
+                <ul>
+                    <li><strong>Simples</strong>: Se você quer apenas alfinetes</li>
+                    <li><strong>Com Rotas</strong>: Se você tem coordenadas inicial e final e quer rotas</li>
+                </ul>
+            </li>
+
+            <li><strong>Clique em "Processar Arquivo"</strong>
+                <ul>
+                    <li>Aguarde o processamento concluir</li>
+                    <li>Verifique as estatísticas exibidas</li>
+                </ul>
+            </li>
+
+            <li><strong>Faça o download</strong>
+                <ul>
+                    <li><strong>Download KML</strong>: Arquivo para abrir no Google Earth</li>
+                    <li><strong>Download Log (.txt)</strong>: Detalhes do processamento para debug</li>
+                </ul>
+            </li>
+
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>5. Entendendo o Log de Processamento</h2>
+        <p>O arquivo de log (.txt) contém informações detalhadas sobre o processamento:</p>
+
+        <h3>Informações no Log:</h3>
+        <ul>
+            <li>Data e hora do processamento</li>
+            <li>Nome do arquivo processado</li>
+            <li>Total de registros encontrados</li>
+            <li>Colunas identificadas na planilha</li>
+            <li>Detalhes de cada item processado</li>
+            <li>Itens ignorados (com motivo)</li>
+            <li>Rotas criadas (se aplicável)</li>
+            <li>Resumo final com estatísticas</li>
+        </ul>
+
+        <div class="success">
+            <strong>Dica:</strong> Use o log para identificar problemas com coordenadas ou dados ausentes na sua planilha.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>6. Problemas Comuns</h2>
+
+        <h3>Todos os itens foram ignorados</h3>
+        <ul>
+            <li>Verifique se as colunas estão com os nomes corretos</li>
+            <li>Certifique-se de que as coordenadas estão preenchidas</li>
+            <li>Confirme que está usando a primeira sheet da planilha</li>
+        </ul>
+
+        <h3>Coordenadas inválidas</h3>
+        <ul>
+            <li>Verifique se as coordenadas estão dentro do Brasil</li>
+            <li>Confirme o formato (decimal ou DMS)</li>
+            <li>Use ponto (.) no lugar de vírgula (,) para decimais no Excel</li>
+        </ul>
+
+        <h3>Rotas não foram criadas</h3>
+        <ul>
+            <li>Certifique-se de escolher o modo "Com Rotas"</li>
+            <li>Verifique se <code>latf</code> e <code>longf</code> estão preenchidos</li>
+            <li>Confirme que <code>kmi</code> é diferente de <code>kmf</code></li>
+        </ul>
+
+        <h3>Erro ao processar</h3>
+        <ul>
+            <li>Verifique se o arquivo é realmente Excel (.xlsx ou .xls)</li>
+            <li>Certifique-se de que a planilha não está corrompida</li>
+            <li>Consulte o log para detalhes do erro</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>7. Dicas e Melhores Práticas</h2>
+        <ul>
+            <li>Use sempre o formato decimal para coordenadas quando possível</li>
+            <li>Mantenha uma planilha modelo com as colunas corretas</li>
+            <li>Valide suas coordenadas no Google Maps antes de enviar</li>
+            <li>Organize seus dados por ano e tipo para facilitar visualização</li>
+            <li>Sempre faça download do log para verificar o processamento</li>
+            <li>Teste com uma planilha pequena antes de processar dados grandes</li>
+            <li>Mantenha backup das suas planilhas originais</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>8. Suporte e Contato</h2>
+        <p>Para dúvidas ou problemas:</p>
+        <ul>
+            <li>Consulte o arquivo de log para detalhes do erro</li>
+            <li>Entre em contato com o Lucas Diego para reportar o erro!</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
