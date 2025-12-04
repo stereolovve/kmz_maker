@@ -30,6 +30,29 @@ def parse_coordinate(coord_str) -> Optional[float]:
     # Tentar formato decimal primeiro
     try:
         result = float(coord_str.replace(",", "."))
+
+        # Detectar coordenadas sem ponto decimal (ex: -2777789 deve ser -27.77789)
+        # Se o valor absoluto for maior que 360 (fora do range de coordenadas válidas)
+        # e tiver 6 ou mais dígitos, adicionar ponto decimal
+        if abs(result) > 360:
+            result_str = str(int(result))
+            is_negative = result < 0
+
+            # Remove sinal para trabalhar apenas com dígitos
+            if is_negative:
+                result_str = result_str[1:]
+
+            # Normalizar para 7 dígitos (2 de grau + 5 decimais)
+            # Se tiver 6 dígitos, adicionar zero no final
+            if len(result_str) == 6:
+                result_str = result_str + '0'
+
+            # Adicionar ponto antes dos últimos 5 dígitos
+            if len(result_str) >= 7:
+                result = float(result_str[:-5] + '.' + result_str[-5:])
+                if is_negative:
+                    result = -result
+
         return result
     except:
         pass

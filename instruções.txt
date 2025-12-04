@@ -1,0 +1,6 @@
+01. Separar as tabelas do PDF que tenham colunas de latitude e longitude;
+02. Transformar as tabelas separadas do PDF em Excel;
+03. Fazer uma aba mãe que terá as colunas: 
+Lista Inicio-Fim: Rodovia, Ponto, Kmi, Kmf, Lati, Longi, Latf, Longf, Ano, Sentido, Tipo, Fonte
+Lista simples: Rodovia, Ponto, Kmi, Lati, Longi, Ano, Sentido, Tipo, Fonte
+04. Tabelas diferentes. Script fará a Lista_Completa.kmz e Lista_simples.kmz

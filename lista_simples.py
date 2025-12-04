@@ -4,7 +4,7 @@ import re
 import hashlib
 
 # Configurações
-INPUT_FILE = "input/lista_simples.xlsx"
+INPUT_FILE = "CVC-OD.xlsx"
 OUTPUT_FILE = "output_simple.kml"
 
 # Cores por tipo de obra (não utilizadas na versão simples)
@@ -137,7 +137,7 @@ def main():
 
     # Carregar dados
     try:
-        df = pd.read_excel(INPUT_FILE, sheet_name="lista_simples", dtype=str)
+        df = pd.read_excel(INPUT_FILE, sheet_name="Planilha1", dtype=str)
         df.columns = df.columns.str.strip()
 
         # Renomear coluna
